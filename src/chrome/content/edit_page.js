@@ -1,39 +1,38 @@
-/* oncommand event */
-function save_page_setup() {
-	alert("Beginning to save current page");
-	jQuery.noConflict();
-	$ = function(selector,context) { 
-	    return new jQuery.fn.init(selector,context||window._content.document); 
-	};
-	$.fn = $.prototype = jQuery.fn;
+//Here we add the event loader
+window.addEventListener("load", function() { myExtension.init(); }, false);  
+  
+var myExtension = {  
+  init: function() {  
+    var appcontent = document.getElementById("appcontent");
+    if(appcontent)  
+      appcontent.addEventListener("DOMContentLoaded", myExtension.onPageLoad, true);  
+  },  
+  
+  onPageLoad: function(aEvent) {  
+    var doc = aEvent.originalTarget; // doc is document that triggered "onload" event  
+    doSaveDetails();
+    // add event listener for page unload   
+    aEvent.originalTarget.defaultView.addEventListener("unload", function(event){ myExtension.onPageUnload(event); }, true);  
+  },  
+  
+  onPageUnload: function(aEvent) {  
+    // do something  
+  }  
+}  
 
-	//Calling only once. If timed loop wanted, use the commented code 
-	performPersistence();
-	/*function timerCallback() {
-		
-		var signal = $('body').attr('signal');
-		
-		if(signal != undefined) {
-			//$('body').attr('signal', "true")
-	         window.alert("Hello3!!!");
-	         performPersistence();
-	    }
-	}*/
-   // setInterval(timerCallback, 10000);
-}
-
-function performPersistence(){
-	//Some Mozilla magic...
+function doSaveDetails(){
+	//window.alert('start saving');
 	var persist = Cc["@mozilla.org/embedding/browser/nsWebBrowserPersist;1"].
 	createInstance(Ci.nsIWebBrowserPersist);
 	var localPath = Cc["@mozilla.org/file/local;1"].
 	createInstance(Ci.nsILocalFile);
 	//Local directory where things will be stored
-	localPath.initWithPath("/Users/Thoughtworks/git/testresult/"+$('title').text());
+	localPath.initWithPath("/Users/Thoughtworks/git/testresult/"+document.title);
 	var localFile = localPath.clone();
+	//alert("/Users/Thoughtworks/git/testresult/"+document.title);
 	//Saving file based on its title
 	localFile.append("index.html");
 	//Must be content.document
 	persist.saveDocument(content.document, localFile, localPath, null, 0, 0);
-	alert("Finished saving current page");
-}
+	//window.alert('Finished saving current page');
+ };

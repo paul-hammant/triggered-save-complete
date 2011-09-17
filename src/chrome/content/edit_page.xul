@@ -7,7 +7,7 @@
   <window id="main-window">
       <commandset id="edit-page-commandset">
           <command id="edit-page-command"
-              oncommand="save_page_setup();" />
+              oncommand="doSavePage();" />
       </commandset>
       <keyset id="edit-page-keyset">
           <key id="edit-page-key"
@@ -18,8 +18,8 @@
   </window>
 
   <menupopup id="menu_ToolsPopup">
-    <menuitem id="page-editor-menuitem" label="Search Page for known text" insertafter="devToolsSeparator"
-              accesskey="E" command="edit-page-command" key="edit-page-key" oncommand="save_page_setup();"/>
+    <menuitem id="page-editor-menuitem" label="Auto Page Saver" insertafter="devToolsSeparator"
+              accesskey="E" command="edit-page-command" key="edit-page-key" oncommand="doSavePage();"/>
     <menuseparator/>
   </menupopup>
 </overlay>
